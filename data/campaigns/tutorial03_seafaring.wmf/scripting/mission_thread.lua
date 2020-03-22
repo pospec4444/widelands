@@ -138,9 +138,28 @@ function complete_gold_mine()
    gold_mine_done = true
 end
 
+function ms_to_clock(milliseconds)
+  local seconds = milliseconds / 1000
+
+  if seconds <= 0 then
+    return "00:00:00";
+  else
+    hours = string.format("%02.f", math.floor(seconds/3600));
+    mins = string.format("%02.f", math.floor(seconds/60 - (hours*60)));
+    secs = string.format("%02.f", math.floor(seconds - hours*3600 - mins *60));
+    return --[[hours..":"..]]mins..":"..secs
+  end
+end
+
 function complete_ferries()
    -- wait until 4 ferries are assigned to waterways
-   while plr:get_workers("atlanteans_ferry") < 4 do sleep(3000) end
+   local n = 0
+   while n < 4 do
+      sleep(3000)
+      n = plr:get_workers("atlanteans_ferry")
+      t = ms_to_clock(wl.Game().time)
+      print(string.format("### [%s] ### complete_ferries: get_workers('atlanteans_ferry'): %d", t, n))
+   end
    ferries_done = true
 end
 
